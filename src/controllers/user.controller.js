@@ -6,7 +6,7 @@ import { Apiresponse } from "../utils/apiresponse.js";
 
 const generatebothtokens=async (userid)=>{
   try{
-    const user=User.findById(userid)
+    const user= await User.findById(userid)
     const accesstoken=await user.generateaccesstoken()
     const refreshtoken=await user.generaterefreshtoken()
     user.refreshtoken=refreshtoken
@@ -130,11 +130,15 @@ const loginuser=Asynchandler(async (req,res)=>{
 })
 
 const logoutuser=Asynchandler(async (req,res)=>{
-  await User.findByIdAndUpdate(req.user._id,
+  await User.findByIdAndUpdate(
+    req.user._id,
     {
       $set:{
-        refreshtoken:undefined,
-      }
+        refreshtoken:undefined
+      },
+    },
+    {
+      new:true
     }
   )
   const options={
