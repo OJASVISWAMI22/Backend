@@ -7,14 +7,17 @@ export const verifyjwt = Asynchandler(async (req, _, next) => {
     const token =
       req.cookies?.accesstoken ||
       req.header("Authorization")?.replace("Bearer ","");
+      console.log("Cookies:", req.cookies);
+console.log("Authorization header:", req.header("Authorization"));
+      console.log(req.cookies.accesstoken)
       console.log(token)
     if (!token) {
       throw new Apierror(401, "Unauthorized Access");
     }
     
-    const decodedtoken = jwt.verify(token,process.env.ACCESS_TOKEN);
+    const decodedtoken = await jwt.verify(token,process.env.ACCESS_TOKEN);
     const user = await User.findById(
-      decodedtoken._id).select("-password -refreshtoken")
+      decodedtoken?._id).select("-password -refreshtoken")
   
 
     if (!user) {

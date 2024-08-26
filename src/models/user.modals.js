@@ -60,7 +60,7 @@ user.methods.isPasswordCorrect=async function(password){
 }
 
 user.methods.generateaccesstoken=function(){
-  jwt.sign({      //payload
+  return jwt.sign({      //payload
     _id:this._id, //from mongodb
     email:this.email,
     username:this.username,
@@ -72,7 +72,7 @@ user.methods.generateaccesstoken=function(){
 }
 
 user.methods.generaterefreshtoken=function(){
-  jwt.sign({      //payload
+  return jwt.sign({      //payload
     _id:this._id, //from mongodb
   },process.env.REFRESH_TOKEN,{
     expiresIn:process.env.REFRESH_TOKEN_EXPIRY
