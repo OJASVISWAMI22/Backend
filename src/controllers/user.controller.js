@@ -109,16 +109,17 @@ const loginuser=Asynchandler(async (req,res)=>{
   if(!iscorrectpassword){
     throw new Apierror(400,"Incorrect Password") 
   }
-  const {accesstoken,refreshtoken}= await generatebothtokens(finduser._id)
+  const {accesstoken,refreshtoken}= await generatebothtokens(finduser?._id)
   const loggeduser=await User.findById(finduser._id).select("-password -refreshtoken")
   const options={
     httpOnly:true,
     secure:true,
   }
-
-  return res.status(200).
-  cookie("refreshtoken",refreshtoken,options).
+  console.log(accesstoken,refreshtoken)
+  return res.
+  status(200).
   cookie("accesstoken",accesstoken,options).
+  cookie("refreshtoken",refreshtoken,options).
   json(
     new Apiresponse(200,
       {
